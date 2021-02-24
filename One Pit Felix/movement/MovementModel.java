@@ -24,7 +24,9 @@ import core.SimError;
  * override.</P>
  */
 public abstract class MovementModel {
-	/** node's speed CSV (min, max) -setting id ({@value})*/
+	
+        public static final String MOVEAREA = "moveArea";
+        /** node's speed CSV (min, max) -setting id ({@value})*/
 	public static final String SPEED = "speed";
 	/** node's wait time CSV (min, max) -setting id ({@value})*/
 	public static final String WAIT_TIME = "waitTime";
@@ -41,7 +43,7 @@ public abstract class MovementModel {
 	public static final String WORLD_SIZE = "worldSize";
 	/** movement models' rng seed -setting id ({@value})*/
 	public static final String RNG_SEED = "rngSeed";
-	
+        
 	/** common rng for all movement models in the simulation */
 	protected static Random rng; 
 	
@@ -51,6 +53,7 @@ public abstract class MovementModel {
 	protected double maxSpeed;
 	protected double minWaitTime;
 	protected double maxWaitTime;
+	protected int moveArea;
 
 	private int maxX;
 	private int maxY;
@@ -99,6 +102,13 @@ public abstract class MovementModel {
 		
 		ah = new ActivenessHandler(settings);
 		
+                if (settings.contains(MOVEAREA)) {
+			moveArea = settings.getInt(MOVEAREA);
+		}
+		else {
+			moveArea = 0;
+		}
+                
 		if (settings.contains(SPEED)) {
 			speeds = settings.getCsvDoubles(SPEED, 2);
 		}
@@ -135,6 +145,7 @@ public abstract class MovementModel {
 	 * @param mm The MovementModel prototype to base the new object to 
 	 */
 	public MovementModel(MovementModel mm) {
+                this.moveArea=mm.moveArea;
 		this.maxSpeed = mm.maxSpeed;
 		this.minSpeed = mm.minSpeed;
 		this.maxWaitTime = mm.maxWaitTime;

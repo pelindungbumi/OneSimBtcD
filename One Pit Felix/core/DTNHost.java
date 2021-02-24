@@ -12,6 +12,7 @@ import movement.MovementModel;
 import movement.Path;
 import routing.MessageRouter;
 import routing.RoutingInfo;
+import btc.*;
 
 /**
  * A DTN capable host.
@@ -34,6 +35,7 @@ public class DTNHost implements Comparable<DTNHost> {
     private List<MovementListener> movListeners;
     private List<NetworkInterface> net;
     private ModuleCommunicationBus comBus;
+    private Wallet wallet;
         
     static {
         DTNSim.registerForReset(DTNHost.class.getCanonicalName());
@@ -61,6 +63,7 @@ public class DTNHost implements Comparable<DTNHost> {
         this.address = getNextAddress();
         this.name = groupId + address;
         this.net = new ArrayList<NetworkInterface>();
+        this.wallet = new Wallet();
 
         for (NetworkInterface i : interf) {
             NetworkInterface ni = i.replicate();
@@ -88,6 +91,10 @@ public class DTNHost implements Comparable<DTNHost> {
                 l.initialLocation(this, this.location);
             }
         }
+    }
+    
+    public Wallet getWallet() {
+        return this.wallet;
     }
 
     /**
